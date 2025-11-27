@@ -18,7 +18,7 @@ const defaultStorage = {
  * @param {Object} http - Axios instance
  * @param {Object} options - Configuration options
  */
-export function createAuthCore(http, options = {}) {
+export function createAuthCore(http, router, options = {}) {
   const {
     endpoints = {
       login: "/token/",
@@ -32,6 +32,7 @@ export function createAuthCore(http, options = {}) {
     onError,
     onLogin,
     onLogout,
+    loginRouteName,
   } = options;
 
   // State
@@ -107,6 +108,7 @@ export function createAuthCore(http, options = {}) {
   const logout = async () => {
     try {
       authenticated.value = false;
+      await router.replace({ name: loginRouteName, query: { logout: true } });
       clearAuth();
     } catch (error) {
       console.log(error);

@@ -1,10 +1,10 @@
-import { inject } from 'vue'
-import { createAuthCore } from './auth'
-import { setupInterceptors } from './interceptors'
-import { setupGuards } from './guards'
+import { inject } from "vue";
+import { createAuthCore } from "./auth";
+import { setupInterceptors } from "./interceptors";
+import { setupGuards } from "./guards";
 
 // Chave do provide/inject
-const AUTH_INJECTION_KEY = Symbol('vue-auth')
+const AUTH_INJECTION_KEY = Symbol("vue-auth");
 
 /**
  * Cria o plugin de autenticação
@@ -32,21 +32,21 @@ export function createAuth(options = {}) {
     publicMetaKey,
     authMetaKey,
     defaultRedirect,
-  } = options
+  } = options;
 
-  let authInstance = null
+  let authInstance = null;
 
   return {
     install(app) {
       if (!http) {
-        throw new Error('[vue-auth] HTTP client (axios instance) is required')
+        throw new Error("[vue-auth] HTTP client (axios instance) is required");
       }
       if (!router) {
-        throw new Error('[vue-auth] Vue Router instance is required')
+        throw new Error("[vue-auth] Vue Router instance is required");
       }
 
       // 1. Criar lógica de auth
-      authInstance = createAuthCore(http, {
+      authInstance = createAuthCore(http, router, {
         endpoints,
         storage,
         tokenKey,
@@ -55,21 +55,24 @@ export function createAuth(options = {}) {
         onError,
         onLogin,
         onLogout,
-      })
+      });
 
       // 2. Adicionar referências internas para os interceptors
-      authInstance._http = http
-      authInstance._router = router
+      authInstance._http = http;
+      authInstance._router = router;
 
       // 3. Configurar interceptors
       setupInterceptors(authInstance, http, {
         onSessionExpired:
           onSessionExpired ||
           (() => {
-            authInstance.clearAuth()
-            router.replace({ name: loginRouteName || 'login', query: { expired: 'true' } })
+            authInstance.clearAuth();
+            router.replace({
+              name: loginRouteName || "login",
+              query: { expired: "true" },
+            });
           }),
-      })
+      });
 
       // 4. Configurar guards
       setupGuards(router, authInstance, {
@@ -78,18 +81,18 @@ export function createAuth(options = {}) {
         publicMetaKey,
         authMetaKey,
         defaultRedirect,
-      })
+      });
 
       // 5. Inicializar
-      authInstance.initialize()
+      authInstance.initialize();
 
       // 6. Disponibilizar via provide/inject
-      app.provide(AUTH_INJECTION_KEY, authInstance)
+      app.provide(AUTH_INJECTION_KEY, authInstance);
 
       // 7. Disponibilizar globalmente via $auth
-      app.config.globalProperties.$auth = authInstance
+      app.config.globalProperties.$auth = authInstance;
     },
-  }
+  };
 }
 
 /**
@@ -97,15 +100,17 @@ export function createAuth(options = {}) {
  * @returns {Object} Auth instance
  */
 export function useAuth() {
-  const auth = inject(AUTH_INJECTION_KEY)
+  const auth = inject(AUTH_INJECTION_KEY);
   if (!auth) {
-    throw new Error('[vue-auth] Auth plugin not installed. Make sure to call app.use(createAuth(...))')
+    throw new Error(
+      "[vue-auth] Auth plugin not installed. Make sure to call app.use(createAuth(...))"
+    );
   }
-  return auth
+  return auth;
 }
 
 // Re-export utils
-export { waitForRef, sleep } from './utils'
+export { waitForRef, sleep } from "./utils";
 
 // Export types for TypeScript
-export { AUTH_INJECTION_KEY }
+export { AUTH_INJECTION_KEY };
