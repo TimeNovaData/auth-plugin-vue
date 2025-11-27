@@ -1,12 +1,40 @@
+import type { Router, RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
+import type { AuthInstance, GuardOptions } from './types'
 import { waitForRef } from './utils'
 
 /**
  * Configura os guards do Vue Router para autenticação
- * @param {Object} router - Vue Router instance
- * @param {Object} auth - Auth instance
- * @param {Object} options - Configuration options
+ * 
+ * Funcionalidades:
+ * - Redireciona usuários não autenticados para login
+ * - Redireciona usuários autenticados que tentam acessar login
+ * - Suporta rotas públicas e privadas via meta
+ * - Limpa query params de logout após processamento
+ * 
+ * @param router - Vue Router instance
+ * @param auth - Auth instance
+ * @param options - Configuration options
+ * 
+ * @example
+ * ```ts
+ * // Configuração de rotas
+ * const routes = [
+ *   { path: '/login', name: 'login', meta: { public: true } },
+ *   { path: '/dashboard', name: 'dashboard', meta: { auth: true } }
+ * ]
+ * 
+ * setupGuards(router, auth, {
+ *   loginRouteName: 'login',
+ *   publicMetaKey: 'public',
+ *   authMetaKey: 'auth'
+ * })
+ * ```
  */
-export function setupGuards(router, auth, options = {}) {
+export function setupGuards(
+  router: Router,
+  auth: AuthInstance,
+  options: GuardOptions = {}
+): void {
   const {
     loginRouteName = 'login',
     resetPasswordRouteName = 'redefinir-senha',
@@ -15,7 +43,11 @@ export function setupGuards(router, auth, options = {}) {
     defaultRedirect = '/',
   } = options
 
-  router.beforeEach(async (to, from, next) => {
+  router.beforeEach(async (
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
+    next: NavigationGuardNext
+  ) => {
     const requiresAuth = to.matched.some((record) => record.meta[authMetaKey])
     const isPublic = to.matched.some((record) => record.meta[publicMetaKey])
     const isLoginPages =
@@ -24,7 +56,7 @@ export function setupGuards(router, auth, options = {}) {
     // Aguardar carregamento inicial se estiver em loading
     if (auth.loading.value) {
       try {
-        await waitForRef(auth.loading, (v) => v === false)
+        await waitForRef(auth.loading, (v: boolean) => v === false)
       } catch (e) {
         console.warn('[vue-auth] Timeout waiting for auth loading')
       }
@@ -42,7 +74,7 @@ export function setupGuards(router, auth, options = {}) {
 
     // Já autenticado tentando acessar login
     if (isLoginPages && auth.isAuthenticated.value) {
-      const redirectPath = to.query.redirect || defaultRedirect
+      const redirectPath = (to.query.redirect as string) || defaultRedirect
       return next({ path: redirectPath, replace: true })
     }
 
