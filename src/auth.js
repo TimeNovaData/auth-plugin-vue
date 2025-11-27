@@ -32,7 +32,7 @@ export function createAuthCore(http, router, options = {}) {
     onError,
     onLogin,
     onLogout,
-    loginRouteName,
+    loginRouteName = "login",
   } = options;
 
   // State
@@ -64,9 +64,9 @@ export function createAuthCore(http, router, options = {}) {
   };
 
   const clearAuth = () => {
+    user.value = null;
     token.value = null;
     refreshToken.value = null;
-    user.value = null;
     authenticated.value = false;
     storage.removeToken?.();
     storage.removeRefreshToken?.();
