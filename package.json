@@ -1,0 +1,38 @@
+{
+  "name": "@novadata/vue-auth",
+  "version": "1.0.0",
+  "description": "Authentication plugin for Vue 3 with JWT refresh token support",
+  "author": "NovaData",
+  "license": "MIT",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "types": "src/types.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./src/index.js"
+    }
+  },
+  "files": [
+    "src"
+  ],
+  "keywords": [
+    "vue",
+    "vue3",
+    "auth",
+    "authentication",
+    "jwt",
+    "refresh-token",
+    "axios",
+    "vue-router"
+  ],
+  "peerDependencies": {
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0",
+    "axios": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TimeNovaData/vue-auth"
+  }
+}
