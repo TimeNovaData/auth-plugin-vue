@@ -1,15 +1,15 @@
-# @novadata/vue-auth
+# novadata-vue-auth
 
 Plugin de autenticação para Vue 3 com suporte a JWT e refresh token.
 
 ## Instalação
 
 ```bash
-npm install @novadata/vue-auth
+npm install novadata-vue-auth
 # ou
-yarn add @novadata/vue-auth
+yarn add novadata-vue-auth
 # ou
-pnpm add @novadata/vue-auth
+pnpm add novadata-vue-auth
 ```
 
 ## Uso Básico
@@ -19,7 +19,7 @@ pnpm add @novadata/vue-auth
 ```javascript
 // main.js ou boot file
 import { createApp } from 'vue'
-import { createAuth } from '@novadata/vue-auth'
+import { createAuth } from 'novadata-vue-auth'
 import axios from 'axios'
 import router from './router'
 
@@ -94,7 +94,7 @@ app.mount('#app')
 
 ```vue
 <script setup>
-import { useAuth } from '@novadata/vue-auth'
+import { useAuth } from 'novadata-vue-auth'
 
 const auth = useAuth()
 

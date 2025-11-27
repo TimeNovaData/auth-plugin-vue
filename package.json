@@ -1,5 +1,5 @@
 {
-  "name": "@novadata/vue-auth",
+  "name": "novadata-vue-auth",
   "version": "1.0.0",
   "description": "Authentication plugin for Vue 3 with JWT refresh token support",
   "author": "NovaData",
