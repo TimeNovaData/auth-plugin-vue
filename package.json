@@ -47,6 +47,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TimeNovaData/vue-auth"
+    "url": "https://github.com/TimeNovaData/auth-plugin-vue"
   }
 }
