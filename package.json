@@ -1,6 +1,6 @@
 {
   "name": "novadata-vue-auth",
-  "version": "2.2",
+  "version": "2.1.4",
   "description": "Authentication plugin for Vue 3 with JWT refresh token support",
   "author": "NovaData",
   "license": "MIT",
