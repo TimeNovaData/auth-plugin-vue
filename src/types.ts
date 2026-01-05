@@ -87,6 +87,8 @@ export interface AuthOptions<T = User> {
   /** Callback executado após logout */
   onLogout?: () => void
 
+  /** Callback executado após buscar os dados do usuário */
+  onFetchUser?: (user: T) => void
   // Config
   /** Configuração dos endpoints */
   endpoints?: AuthEndpoints

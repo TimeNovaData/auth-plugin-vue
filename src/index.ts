@@ -55,6 +55,7 @@ export function createAuth<T = User>(options: AuthOptions<T>): AuthPlugin {
     onError,
     onLogin,
     onLogout,
+    onFetchUser,
     // Config
     endpoints,
     storage,
@@ -90,6 +91,7 @@ export function createAuth<T = User>(options: AuthOptions<T>): AuthPlugin {
         onError,
         onLogin,
         onLogout,
+        onFetchUser,
       })
 
       // 2. Adicionar referências internas para os interceptors
