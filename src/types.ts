@@ -1,5 +1,13 @@
-import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios'
-import type { Router, RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
+import type {
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+  AxiosResponse,
+} from 'axios'
+import type {
+  Router,
+  RouteLocationNormalized,
+  NavigationGuardNext,
+} from 'vue-router'
 import type { ComputedRef, Ref, App } from 'vue'
 
 /**
@@ -68,7 +76,7 @@ export interface AuthOptions<T = User> {
   http: AxiosInstance
   /** Instância do Vue Router (obrigatório) */
   router: Router
-  
+
   // Callbacks
   /** Callback executado quando a sessão expira */
   onSessionExpired?: () => void
@@ -78,7 +86,7 @@ export interface AuthOptions<T = User> {
   onLogin?: (user: T) => void
   /** Callback executado após logout */
   onLogout?: () => void
-  
+
   // Config
   /** Configuração dos endpoints */
   endpoints?: AuthEndpoints
@@ -90,7 +98,7 @@ export interface AuthOptions<T = User> {
   refreshTokenKey?: string
   /** Número máximo de tentativas de refresh (padrão: 3) */
   maxRetries?: number
-  
+
   // Guards config
   /** Nome da rota de login (padrão: 'login') */
   loginRouteName?: string
@@ -116,6 +124,7 @@ export interface AuthCoreOptions<T = User> {
   onError?: (message: string, error: Error) => void
   onLogin?: (user: T) => void
   onLogout?: () => void
+  onFetchUser?: (user: T) => void
   loginRouteName?: string
 }
 
@@ -158,7 +167,7 @@ export interface AuthInstance<T = User> {
   isAuthenticated: ComputedRef<boolean>
   /** Indica se está carregando */
   loading: ComputedRef<boolean>
-  
+
   // Methods
   /** Realiza o login com as credenciais fornecidas */
   login: (credentials: LoginCredentials) => Promise<LoginResult<T>>
@@ -176,7 +185,7 @@ export interface AuthInstance<T = User> {
   setUser: (userData: T) => void
   /** Define os tokens manualmente */
   setTokens: (token: string, refreshToken: string) => void
-  
+
   // Internal refs (para uso nos interceptors/guards)
   /** @internal */
   _http?: AxiosInstance

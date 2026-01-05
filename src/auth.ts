@@ -11,7 +11,7 @@ import type {
   LoginResult,
   LoginResponse,
   RefreshResponse,
-  User
+  User,
 } from './types'
 
 /**
@@ -22,7 +22,8 @@ const defaultStorage: AuthStorage = {
   setToken: (token: string) => localStorage.setItem('token', token),
   removeToken: () => localStorage.removeItem('token'),
   getRefreshToken: () => localStorage.getItem('refresh_token'),
-  setRefreshToken: (token: string) => localStorage.setItem('refresh_token', token),
+  setRefreshToken: (token: string) =>
+    localStorage.setItem('refresh_token', token),
   removeRefreshToken: () => localStorage.removeItem('refresh_token'),
 }
 
@@ -32,7 +33,7 @@ const defaultStorage: AuthStorage = {
  * @param router - Vue Router instance
  * @param options - Configuration options
  * @returns AuthInstance com state reativo e métodos
- * 
+ *
  * @example
  * ```ts
  * const auth = createAuthCore(axiosInstance, router, {
@@ -63,23 +64,31 @@ export function createAuthCore<T = User>(
     onError,
     onLogin,
     onLogout,
+    onFetchUser,
     loginRouteName = 'login',
   } = options
 
   // State
   const token: Ref<string | null> = ref(storage.getToken?.() || null)
-  const refreshToken: Ref<string | null> = ref(storage.getRefreshToken?.() || null)
+  const refreshToken: Ref<string | null> = ref(
+    storage.getRefreshToken?.() || null
+  )
   const user: Ref<T | null> = ref(null)
   const loading: Ref<boolean> = ref(true)
   const authenticated: Ref<boolean> = ref(false)
 
   // Computed
-  const isAuthenticated: ComputedRef<boolean> = computed(() => authenticated.value)
+  const isAuthenticated: ComputedRef<boolean> = computed(
+    () => authenticated.value
+  )
 
   /**
    * Define os tokens de acesso e refresh
    */
-  const setTokens = (newToken: string | null, newRefresh: string | null): void => {
+  const setTokens = (
+    newToken: string | null,
+    newRefresh: string | null
+  ): void => {
     token.value = newToken
     refreshToken.value = newRefresh
 
@@ -111,17 +120,27 @@ export function createAuthCore<T = User>(
   /**
    * Realiza o login com as credenciais fornecidas
    */
-  const login = async (credentials: LoginCredentials): Promise<LoginResult<T>> => {
+  const login = async (
+    credentials: LoginCredentials
+  ): Promise<LoginResult<T>> => {
     try {
       loading.value = true
 
-      const { data } = await http.post<LoginResponse>(endpoints.login!, credentials, {
-        headers: { 'Content-Type': 'application/json' },
-      })
+      const { data } = await http.post<LoginResponse>(
+        endpoints.login!,
+        credentials,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
 
       // Extrair tokens da resposta (suporta diferentes formatos)
-      const accessToken = (data[tokenKey] || data.access || data.token) as string
-      const refresh = (data[refreshTokenKey] || data.refresh || data.refresh_token) as string
+      const accessToken = (data[tokenKey] ||
+        data.access ||
+        data.token) as string
+      const refresh = (data[refreshTokenKey] ||
+        data.refresh ||
+        data.refresh_token) as string
 
       setTokens(accessToken, refresh)
       await fetchUser()
@@ -130,7 +149,10 @@ export function createAuthCore<T = User>(
 
       return { success: true, user: user.value as T }
     } catch (error) {
-      const axiosError = error as AxiosError<{ detail?: string; message?: string }>
+      const axiosError = error as AxiosError<{
+        detail?: string
+        message?: string
+      }>
       const message =
         axiosError.response?.data?.detail ||
         axiosError.response?.data?.message ||
@@ -167,6 +189,7 @@ export function createAuthCore<T = User>(
       const { data } = await http.get<T>(endpoints.user!)
       user.value = data
       authenticated.value = true
+      onFetchUser?.(data)
       return data
     } catch (error) {
       clearAuth()

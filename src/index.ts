@@ -11,10 +11,10 @@ export const AUTH_INJECTION_KEY: InjectionKey<AuthInstance> = Symbol('vue-auth')
 
 /**
  * Cria o plugin de autenticação para Vue 3
- * 
+ *
  * @param options - Opções de configuração do plugin
  * @returns Plugin Vue para ser usado com app.use()
- * 
+ *
  * @example
  * ```ts
  * // main.ts
@@ -22,9 +22,9 @@ export const AUTH_INJECTION_KEY: InjectionKey<AuthInstance> = Symbol('vue-auth')
  * import { createAuth } from 'novadata-vue-auth'
  * import axios from 'axios'
  * import router from './router'
- * 
+ *
  * const app = createApp(App)
- * 
+ *
  * const auth = createAuth({
  *   http: axios,
  *   router,
@@ -40,7 +40,7 @@ export const AUTH_INJECTION_KEY: InjectionKey<AuthInstance> = Symbol('vue-auth')
  *     console.log('Usuário logado:', user)
  *   }
  * })
- * 
+ *
  * app.use(auth)
  * app.use(router)
  * app.mount('#app')
@@ -132,39 +132,39 @@ export function createAuth<T = User>(options: AuthOptions<T>): AuthPlugin {
 
 /**
  * Composable para acessar o auth em componentes Vue
- * 
+ *
  * @returns Instância do Auth com state reativo e métodos
  * @throws Error se o plugin não foi instalado
- * 
+ *
  * @example
  * ```vue
  * <script setup lang="ts">
  * import { useAuth } from 'novadata-vue-auth'
- * 
+ *
  * const auth = useAuth()
- * 
+ *
  * // State reativo
  * const { user, isAuthenticated, loading } = auth
- * 
+ *
  * // Métodos
  * async function handleLogin() {
  *   const result = await auth.login({
  *     email: 'user@example.com',
  *     password: 'password'
  *   })
- *   
+ *
  *   if (result.success) {
  *     console.log('Login bem sucedido!', result.user)
  *   } else {
  *     console.error('Erro no login:', result.message)
  *   }
  * }
- * 
+ *
  * async function handleLogout() {
  *   await auth.logout()
  * }
  * </script>
- * 
+ *
  * <template>
  *   <div v-if="loading">Carregando...</div>
  *   <div v-else-if="isAuthenticated">

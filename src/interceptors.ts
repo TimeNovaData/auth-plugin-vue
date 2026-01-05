@@ -1,16 +1,24 @@
-import type { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios'
-import type { AuthInstance, AuthAxiosRequestConfig, InterceptorOptions } from './types'
+import type {
+  AxiosInstance,
+  AxiosError,
+  InternalAxiosRequestConfig,
+} from 'axios'
+import type {
+  AuthInstance,
+  AuthAxiosRequestConfig,
+  InterceptorOptions,
+} from './types'
 
 /**
  * Configura os interceptors do Axios para autenticação
- * 
+ *
  * - Request: Adiciona automaticamente o token no header Authorization
  * - Response: Trata erros 401 e tenta refresh automático do token
- * 
+ *
  * @param auth - Auth instance
  * @param http - Axios instance
  * @param options - Configuration options
- * 
+ *
  * @example
  * ```ts
  * setupInterceptors(authInstance, axiosInstance, {

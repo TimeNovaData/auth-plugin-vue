@@ -6,12 +6,12 @@ import { watch, type Ref } from 'vue'
  * @param predicate - Function that returns true when condition is met
  * @param timeout - Timeout in milliseconds (default: 10000)
  * @returns Promise that resolves when predicate is true
- * 
+ *
  * @example
  * ```ts
  * // Aguardar loading terminar
  * await waitForRef(auth.loading, (v) => v === false)
- * 
+ *
  * // Aguardar usuário ser carregado
  * await waitForRef(auth.user, (u) => u !== null, 5000)
  * ```
@@ -51,7 +51,7 @@ export function waitForRef<T>(
  * Sleep utility - pausa a execução por um tempo determinado
  * @param ms - Milliseconds to sleep
  * @returns Promise that resolves after the specified time
- * 
+ *
  * @example
  * ```ts
  * // Aguardar 1 segundo
